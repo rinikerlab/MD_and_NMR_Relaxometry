@@ -2,6 +2,9 @@
 Building_MSM_Ile_sidechain.ipynb
 	- Example jupyter notebook that can build a Markov Model for the side chain motion from "scratch"
 	  (i.e. requires the trajectory and topology as input)
+	
+	- If you are trying to build MSMs for a new system and want to use an example notebook as starting point, 
+	this is the notebook you want to look at.
 
 env4msm.txt
 	conda environment required to be able to reproduce the work done by the notebook above (and below).
