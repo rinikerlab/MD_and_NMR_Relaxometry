@@ -12,3 +12,6 @@ data coming from https://pubs.acs.org/doi/pdf/10.1021/jacs.1c04687:
 
 data coming from https://onlinelibrary.wiley.com/doi/pdf/10.1002/ange.202007205:
 	Ubq_15N_NASR_S2_fig2C.txt
+
+data coming from https://pubs.aip.org/aip/jcp/article/148/4/045104/75273:
+	ubq1_15n.txt
