@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from pyDR.Selection import select_tools as selt
-import DynamicDetector.fitting_functions as fit
+import fitting_functions as fit
 
 import MDAnalysis as mda
 
