@@ -16,6 +16,9 @@ conda activate MD_and_NMR_Relaxometry
 Additionally, the python package pyDR (by A. Smith) is required, which can be found [here](https://github.com/alsinmr/pyDR). The package can be installed by running:
 ```bash
 pip install git+git://github.com/alsinmr/pyDR.git
+The python package Energy based Clustering can be found here: [here](https://github.com/rinikerlab/EnergyBasedClustering). The package can be installed with:
+pip install git+https://github.com/rinikerlab/EnergyBasedClustering.git
+
 ``` 
 ## Usage
 The analysis scripts are all written in Python, mostly as Jupyter notebooks. The notebooks are located in the folder `analysis`. The notbooks can be used to reproduce the figures in the publication. 
