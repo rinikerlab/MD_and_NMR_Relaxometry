@@ -321,6 +321,8 @@ def plot_eigenmodes(msm, dihedrals, num=4):
             mask=True)
         ax.set_xlabel('chi 1')
         ax.set_ylabel('chi 2')
+        ax.set_ylim([0, 360])
+        ax.set_xlim([0, 360])
     fig.tight_layout()
 
     return fig, axes
