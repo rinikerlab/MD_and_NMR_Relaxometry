@@ -251,6 +251,134 @@ def plot_msm_final(dihedrals, mtraj, alpha = 1, title = None, colors=None, with_
 
     return fig, ax, contours
 
+def plot_msm_final2(dihedrals, mtraj, alpha = 1, title = None, colors=None, with_leg=True):
+    
+    from matplotlib.colors import LinearSegmentedColormap
+    
+    def add_labels(ax, fontsize):
+        ax.set_box_aspect(1)
+        ax.set_xlabel(r'$\chi{}_1$ [degrees]', fontsize = fontsize)
+        ax.set_ylabel(r'$\chi{}_2$ [degrees]', fontsize = fontsize)
+
+        ax.set_xticks(np.arange(60, 361, 120))
+        ax.set_yticks(np.arange(60, 361, 120))
+
+        ax.tick_params(axis="both",direction="in", width = 2, length = 10)
+        ax.set_xticklabels(np.arange(60, 361, 120) , fontsize=fontsize)
+        ax.set_yticklabels(np.arange(60, 361, 120) , fontsize=fontsize)
+        
+        # also set limits
+        ax.set_ylim([0, 360])
+        ax.set_xlim([0, 360])
+        
+        for axis in ['top','bottom','left','right']:
+            ax.spines[axis].set_linewidth(2)
+
+        
+        
+    import matplotlib.ticker as ticker
+
+    
+    def find_color(x, y):
+        """
+        finds an appropriate color from the tab20b
+        """
+        colors = [ 
+                '#cedb9c', # light green
+                '#e7cb94', # light orange   # FDD5B0   # old one: F99B45
+                '#9c9ede', # light blue
+                '#637939', # dark green
+                '#bd9e39', # dark orange
+                '#393b79', # dark blue
+                '#7b4173', # dark purple 
+                '#de9ed6', # light purple
+                '#d6616b', # pink
+                ]
+        
+        
+        idx_x = (np.argmin(np.abs([60, 180, 360] - np.average(x))))
+        idx_y = (np.argmin(np.abs([60, 180, 360] - np.average(y))))
+        
+        code = 10*idx_y + idx_x
+        mapping = [0, 1, 2, 10, 11, 12, 20, 21, 22]
+        return colors[mapping.index(code)]
+        
+    fontsize = 28
+    
+    fig = plt.figure(layout="constrained", figsize=(24, 9))
+    mosaic = """AB"""
+    ax_dict = fig.subplot_mosaic(mosaic)
+
+    ax = ax_dict['A']
+    n_states = np.max(mtraj) +1
+
+    levels = np.arange(11)
+
+    # To get the scale includng all 3 of them with proper location of the minima:
+    x, y, z = get_histogram(dihedrals[0], dihedrals[1], avoid_zero_count=False, histrange=[[0, 360], [0, 360]])
+    f, minim = _to_free_energy(z, minener_zero=True) * 1
+    #cs = ax.contourf(x, y, f, cmap='Greys_r', alpha=1, levels = levels)
+    cs = ax.contourf(x, y, f, cmap=create_custom_cmap('#141414'), alpha=1, levels = levels)
+    
+    contour = ax.contour(x, y, f, colors='black', alpha=1, levels = levels, linewidths=0.5)
+    
+    
+    # To get coloring right we need to do this step twice:
+    offsets = get_offsets(dihedrals, mtraj, n_states, z)
+    
+    add_labels(ax, fontsize)
+    
+    cbar = fig.colorbar(cs, shrink = 0.85)
+    cbar.ax.set_ylabel('Free Energy / kT', fontsize=fontsize)
+    cbar.ax.tick_params(labelsize=fontsize)
+    
+    contours = []
+    
+    ax = ax_dict['B']
+
+    # Now plot the actual data
+    for i in range(n_states):
+        idx = np.where(mtraj == i)
+        percent_pop = np.rint(np.count_nonzero(mtraj == i) / len(mtraj) * 100)
+        c = find_color(dihedrals[0][idx], dihedrals[1][idx])
+        
+        # BEFORE WE HAD
+        _x, _y, _z = get_histogram(dihedrals[0][idx], dihedrals[1][idx], avoid_zero_count=False, histrange=[[0, 360], [0, 360]])
+        _f, _ = _to_free_energy(_z, minener_zero=True) * 1
+
+        _f += offsets[i] # gets the right colors for everything (minima is 0 only for lowest macrostate)
+        ax.contourf(_x, _y, _f, cmap= LinearSegmentedColormap.from_list('test', [c, c], N=50), 
+                    alpha=1, levels = levels)
+        contour = ax.contour(_x, _y, _f, colors=c, alpha=1, levels = levels, linewidths=2)
+        
+        # simple scatter plot
+        #ax.scatter(dihedrals[0][idx], dihedrals[1][idx], color=c, s = 10)
+        
+        #break
+        
+        if percent_pop == 0:
+            ax.scatter(-100, -100, marker = 's', label = f'$S_{i+1}$: < 1%', color = c, s = 144)
+        else:
+            ax.scatter(-100, -100, marker = 's', label = f'$S_{i+1}$: {percent_pop:.0f}%', color = c, s = 144)
+    
+    add_labels(ax, fontsize)
+    
+
+    
+    if title is not None:
+        fig.suptitle(title, fontsize = fontsize*1.25)
+    
+
+
+    if with_leg:
+        #ax.legend(loc='lower center', fontsize = 0.6* fontsize, ncols = n_states, edgecolor='black')
+        legend = ax.legend(loc='center left', fontsize = fontsize, ncols = 1 , edgecolor='black', bbox_to_anchor=(1, 0.5))
+        frame = legend.get_frame()
+        frame.set_linewidth(2)
+
+    return fig, ax, contours
+
+
 def draw_arrow(ax, pos_1, pos_2, label="", width=1.0, arrow_curvature=1.0, color="black",
                 patchA=None, patchB=None, shrinkA=2, shrinkB=1, arrow_label_size=None, arrow_label_location=.55):
     r""" Draws a slightly curved arrow from (x1,y1) to (x2,y2). 
