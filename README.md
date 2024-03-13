@@ -5,9 +5,9 @@
 This repo contains the simulation setups and analysis script for the publication on ubiquitin by Champion et al.
 All simulations were performed with GROMACS and the topology files and simulation setups can be found in the folder `simulations`. No trajectories are provided in this repo but can be provided upon request. The simulations are grouped in folders with the names of the different force field parameters used. For further information on the simulation setups, please refer to the publication.
 
-Unraveling motion in proteins by combining NMR relaxometry and molecular dynamics simulations: A case study on ubiquitin
-Candide Champion, Marc Lehner, Albert A. Smith, Fabien Ferrage, Nicolas Bolik-Coulon, Sereina Riniker 
-J. Chem. Phys. 160, 104105 (2024)
+Unraveling motion in proteins by combining NMR relaxometry and molecular dynamics simulations: A case study on ubiquitin  
+Candide Champion, Marc Lehner, Albert A. Smith, Fabien Ferrage, Nicolas Bolik-Coulon, Sereina Riniker   
+J. Chem. Phys. 160, 104105 (2024)  
 https://doi.org/10.1063/5.0188416
 
 ## Installation
