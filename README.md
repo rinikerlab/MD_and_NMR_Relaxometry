@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/688051491.svg)](https://zenodo.org/doi/10.5281/zenodo.10812445)
+
 # MD_and_NMR_Relaxometry
 
 ## Description
